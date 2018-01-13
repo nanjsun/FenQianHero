@@ -1,9 +1,6 @@
 package com.fenqian;
 
-/**
- * Created by 618 on 2018/1/8.
- * @author lingfengsan
- */
+
 public class Information {
     private String question;
     private String[] ans;

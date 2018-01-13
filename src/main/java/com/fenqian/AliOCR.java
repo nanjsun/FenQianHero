@@ -2,11 +2,9 @@ package com.fenqian;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import sun.misc.BASE64Encoder;
@@ -15,17 +13,14 @@ import javax.imageio.ImageIO;
 
 public class AliOCR {
     private BufferedImage bufferedImage;
-    private String host = "http://tysbgpu.market.alicloudapi.com";
-    private String path = "/api/predict/ocr_general";
-    private String method = "POST";
-    private String appcode = "17f0a3c27cb74e3f95a6f5ae731761fc";
-    Map<String, String> headers = new HashMap<String, String>();
+    private Map<String, String> headers = new HashMap<String, String>();
 
     private String jsonResult;
 
     
     public String callAliOcrAPI(String base64Code){
         //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        String appcode = "17f0a3c27cb74e3f95a6f5ae731761fc";
         headers.put("Authorization", "APPCODE " + appcode);
         //根据API的要求，定义相对应的Content-Type
         headers.put("Content-Type", "application/json; charset=UTF-8");
@@ -46,6 +41,9 @@ public class AliOCR {
              * 相应的依赖请参照
              * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
              */
+            String host = "http://tysbgpu.market.alicloudapi.com";
+            String path = "/api/predict/ocr_general";
+            String method = "POST";
             HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
             System.out.println(response.toString());
 //            //获取response的body
@@ -106,14 +104,15 @@ public class AliOCR {
 
         for(Iterator<Map.Entry<String,Integer>> it=list.iterator();it.hasNext();)
         {
-            String value = it.next().toString();
+            String wordFragments = it.next().toString();
             if(index > 2){
-                stringBuilder.append(value.split("=")[0]);
+                stringBuilder.append(wordFragments.split("=")[0].replaceAll("^\\d.", ""));
+
             } else {
-                questionAndAnswer[3 - index] = value.split("=")[0];
+                questionAndAnswer[3 - index] = wordFragments.split("=")[0];
             }
 
-            System.out.println(index + ":" + value.split("=")[0]);
+            System.out.println(index + ":" + wordFragments.split("=")[0]);
             index ++;
         }
         questionAndAnswer[0] = stringBuilder.toString();
