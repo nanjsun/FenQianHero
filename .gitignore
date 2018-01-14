@@ -2,3 +2,4 @@ target/
 .idea/libraries/
 *.jpg
 photos/
+.idea/workspace.xml

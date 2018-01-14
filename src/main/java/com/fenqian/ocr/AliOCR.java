@@ -1,4 +1,4 @@
-package com.fenqian;
+package com.fenqian.ocr;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -65,7 +65,7 @@ public class AliOCR {
 
         BASE64Encoder encoder = new BASE64Encoder();
         String encodeString = encoder.encode(outputStream.toByteArray());
-        System.out.println(encodeString);
+//        System.out.println(encodeString);
 
         return encodeString;
 

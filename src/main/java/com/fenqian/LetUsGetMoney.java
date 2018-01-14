@@ -1,9 +1,10 @@
 package com.fenqian;
 
+import com.fenqian.image.ScreenShotImage;
+import com.fenqian.ocr.AliOCR;
+
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.ServiceConfigurationError;
 import java.util.concurrent.*;
 
 /**
@@ -23,10 +24,25 @@ public class LetUsGetMoney {
     private String lastQuestionKeyWord = "Nothing";
 
     public void start() {
+        boolean imageValid = false;
         ScreenShotImage screenShotImage = new ScreenShotImage();
         BufferedImage bufferedImage = screenShotImage.getBufferedImage(x, y, width, height);
+        if (screenShotImage.isValidImage()){
+            imageValid = true;
+        }
+
+        while (!imageValid){
+            bufferedImage = screenShotImage.getBufferedImage(x, y, width, height);
+            if(screenShotImage.isValidImage()){
+                imageValid = true;
+            }
+        }
 
         Long beginOfImageDectect = System.currentTimeMillis();
+        AliOCR aliOCR = new AliOCR();
+        ;
+        ;
+        question = aliOCR.parseReslut(aliOCR.callAliOcrAPI(aliOCR.getBase64Code(bufferedImage)))[0];
 
         String originalWords = new TessOCR().getOCRByBufferedImage(bufferedImage);
 
@@ -60,6 +76,36 @@ public class LetUsGetMoney {
 
             beginSearch();
         }
+    }
+    public void startWithAliOCR(){
+        boolean imageValid = false;
+        int recaptureCount = 0;
+        ScreenShotImage screenShotImage = new ScreenShotImage();
+        BufferedImage bufferedImage = screenShotImage.getBufferedImage(x, y, width, height);
+        if(screenShotImage.isValidImage()){
+            imageValid = true;
+        } else {
+            while (!imageValid){
+                recaptureCount ++;
+                System.out.println("invalid image, recapturing imags, count:" + recaptureCount);
+                bufferedImage = screenShotImage.getBufferedImage(x, y, width, height);
+                if(screenShotImage.isValidImage()){
+                    imageValid = true;
+                }
+            }
+        }
+
+
+
+
+        Long beginOfImageDectect = System.currentTimeMillis();
+        AliOCR aliOCR = new AliOCR();
+        String[] questionAndAnswer = aliOCR.parseReslut(aliOCR.callAliOcrAPI(aliOCR.getBase64Code(bufferedImage)));
+        question = questionAndAnswer[0];
+        answers = questionAndAnswer;
+        beginSearch();
+
+
     }
 
     private void beginSearch(){

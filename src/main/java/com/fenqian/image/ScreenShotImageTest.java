@@ -1,10 +1,10 @@
-package com.fenqian;
+package com.fenqian.image;
 
 
+import com.fenqian.image.ScreenShotImage;
 import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +29,7 @@ public class ScreenShotImageTest {
         } catch (IOException e){
             e.printStackTrace();
         }
+        screenShotImage.isValidImage();
 
 
     }

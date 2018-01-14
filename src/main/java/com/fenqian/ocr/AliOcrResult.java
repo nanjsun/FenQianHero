@@ -1,4 +1,4 @@
-package com.fenqian;
+package com.fenqian.ocr;
 
 import java.util.List;
 

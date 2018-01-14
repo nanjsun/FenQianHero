@@ -1,4 +1,4 @@
-package com.fenqian;
+package com.fenqian.ocr;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
