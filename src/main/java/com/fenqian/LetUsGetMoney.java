@@ -1,10 +1,14 @@
 package com.fenqian;
 
+import com.fenqian.click.HandIn;
 import com.fenqian.image.ScreenShotImage;
 import com.fenqian.ocr.AliOCR;
+import com.fenqian.search.SearchQuestion;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.ServiceConfigurationError;
 import java.util.concurrent.*;
 
 /**
@@ -13,7 +17,8 @@ import java.util.concurrent.*;
 public class LetUsGetMoney {
     private final int NUM_OF_ANSWERS = 2;
     private final String QUESTION_FLAG="?";
-    private String[] answers;
+    private String[] questionAndAnswer = new String[4];
+    private String[] answers = new String[3];
     private String question;
     private long startTime;
     private long endTime;
@@ -24,6 +29,8 @@ public class LetUsGetMoney {
     private String lastQuestionKeyWord = "Nothing";
 
     public void start() {
+
+
         boolean imageValid = false;
         ScreenShotImage screenShotImage = new ScreenShotImage();
         BufferedImage bufferedImage = screenShotImage.getBufferedImage(x, y, width, height);
@@ -77,7 +84,10 @@ public class LetUsGetMoney {
             beginSearch();
         }
     }
+
+
     public void startWithAliOCR(){
+        startTime = System.currentTimeMillis();
         boolean imageValid = false;
         int recaptureCount = 0;
         ScreenShotImage screenShotImage = new ScreenShotImage();
@@ -92,37 +102,57 @@ public class LetUsGetMoney {
                 if(screenShotImage.isValidImage()){
                     imageValid = true;
                 }
+                try{
+                    Thread.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+
             }
         }
 
-
-
-
         Long beginOfImageDectect = System.currentTimeMillis();
         AliOCR aliOCR = new AliOCR();
-        String[] questionAndAnswer = aliOCR.parseReslut(aliOCR.callAliOcrAPI(aliOCR.getBase64Code(bufferedImage)));
+        questionAndAnswer = aliOCR.parseReslut(aliOCR.callAliOcrAPI(aliOCR.getBase64Code(bufferedImage)));
         question = questionAndAnswer[0];
-        answers = questionAndAnswer;
-        beginSearch();
+        System.out.println("questionAndAnswer size:"  + questionAndAnswer.length);
 
+        for(int i = 0; i < questionAndAnswer.length -1 ; i ++){
+            this.answers[i] = this.questionAndAnswer[i +1];
+        }
+
+        SearchQuestion searchQuestion = new SearchQuestion(questionAndAnswer, answers);
+        try {
+            searchQuestion.search(question);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        int finalResult = searchQuestion.finalResultIndex();
+        endTime = System.currentTimeMillis();
+
+
+        System.out.println("finalResult :" + finalResult + "---" + answers[finalResult]);
+
+        System.out.println("totalTime :" + (endTime - startTime));
+        HandIn handIn = new HandIn(finalResult);
+        while(System.currentTimeMillis() - startTime < 5000){
+            try{
+                Thread.sleep(500);
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+        handIn.mouseClick();
+        System.out.println("finalTime :" + (System.currentTimeMillis() - startTime));
 
     }
 
     private void beginSearch(){
         long countQuestion = 1;
-//        long[] countQuestionAndAnswer = new long[3];
-//        long[] countAnswer = new long[3];
-
         int maxIndex = 0;
 
         Search serachQuestion = new Search(question);
 
-//        Search[] searchQuestionAndAnswer = new Search[3];
-//        Search[] searchAnswers = new Search[3];
-//        System.out.println(searchAnswers.toString());
-//
-//        FutureTask<Long>[] futureQA = new FutureTask[NUM_OF_ANSWERS];
-//        FutureTask<Long>[] futureAnswers = new FutureTask[NUM_OF_ANSWERS];
         ArrayBlockingQueue<Runnable> workQuenue = new ArrayBlockingQueue<Runnable>(5);
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5,10,
                 200, TimeUnit.MINUTES,workQuenue, Executors.defaultThreadFactory(),new RejectedExecutionHandlerForSearch());
