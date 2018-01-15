@@ -87,7 +87,6 @@ public class LetUsGetMoney {
 
 
     public void startWithAliOCR(){
-        startTime = System.currentTimeMillis();
         boolean imageValid = false;
         int recaptureCount = 0;
         ScreenShotImage screenShotImage = new ScreenShotImage();
@@ -110,7 +109,7 @@ public class LetUsGetMoney {
 
             }
         }
-
+        startTime = System.currentTimeMillis();
         Long beginOfImageDectect = System.currentTimeMillis();
         AliOCR aliOCR = new AliOCR();
         questionAndAnswer = aliOCR.parseReslut(aliOCR.callAliOcrAPI(aliOCR.getBase64Code(bufferedImage)));
