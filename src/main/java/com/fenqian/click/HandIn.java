@@ -11,9 +11,13 @@ import java.awt.event.KeyEvent;
  */
 public class HandIn {
     private Robot robot = null;
-    private int[] optionA = {1160,400};
-    private int[] optionB = {1160,500};
-    private int[] optionC = {1160,600};
+//    private int[] optionA = {1160,400};
+//    private int[] optionB = {1160,500};
+//    private int[] optionC = {1160,600};
+    private int[] optionA = {960,340};
+    private int[] optionB = {960,420};
+//    private int[] optionC = {960,500};
+    private int[] optionC = {1960,1080};
     int x;
     int y;
 
@@ -54,7 +58,7 @@ public class HandIn {
     }
 
     public static void main(String[] args){
-        HandIn handIn = new HandIn(0);
+        HandIn handIn = new HandIn(1);
         handIn.mouseClick();
     }
 }

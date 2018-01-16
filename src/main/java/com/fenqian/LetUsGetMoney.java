@@ -47,8 +47,7 @@ public class LetUsGetMoney {
 
         Long beginOfImageDectect = System.currentTimeMillis();
         AliOCR aliOCR = new AliOCR();
-        ;
-        ;
+
         question = aliOCR.parseReslut(aliOCR.callAliOcrAPI(aliOCR.getBase64Code(bufferedImage)))[0];
 
         String originalWords = new TessOCR().getOCRByBufferedImage(bufferedImage);
@@ -135,14 +134,14 @@ public class LetUsGetMoney {
 
         System.out.println("totalTime :" + (endTime - startTime));
         HandIn handIn = new HandIn(finalResult);
-        while(System.currentTimeMillis() - startTime < 7000){
+        while(System.currentTimeMillis() - startTime < 7500){
             try{
                 Thread.sleep(500);
             } catch (InterruptedException e){
                 e.printStackTrace();
             }
         }
-        handIn.mouseClick();
+//        handIn.mouseClick();
         System.out.println("finalTime :" + (System.currentTimeMillis() - startTime));
 
     }

@@ -1,5 +1,6 @@
 target/
-.idea/libraries/
+.idea/
 *.jpg
 photos/
 .idea/workspace.xml
+FenQianHero.iml
