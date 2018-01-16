@@ -17,7 +17,7 @@ public class HandIn {
     private int[] optionA = {960,340};
     private int[] optionB = {960,420};
 //    private int[] optionC = {960,500};
-    private int[] optionC = {1960,1080};
+    private int[] optionC = {960,500};
     int x;
     int y;
 
@@ -58,7 +58,7 @@ public class HandIn {
     }
 
     public static void main(String[] args){
-        HandIn handIn = new HandIn(1);
+        HandIn handIn = new HandIn(0);
         handIn.mouseClick();
     }
 }

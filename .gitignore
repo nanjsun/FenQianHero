@@ -4,3 +4,4 @@ target/
 photos/
 .idea/workspace.xml
 FenQianHero.iml
+*.txt
