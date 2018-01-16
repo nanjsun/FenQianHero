@@ -141,7 +141,7 @@ public class LetUsGetMoney {
                 e.printStackTrace();
             }
         }
-//        handIn.mouseClick();
+        handIn.mouseClick();
         System.out.println("finalTime :" + (System.currentTimeMillis() - startTime));
 
     }
