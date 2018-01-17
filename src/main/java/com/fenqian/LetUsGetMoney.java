@@ -133,7 +133,7 @@ public class LetUsGetMoney {
         System.out.println("finalResult :" + finalResult + "---" + answers[finalResult]);
 
         System.out.println("totalTime :" + (endTime - startTime));
-        HandIn handIn = new HandIn(finalResult);
+        HandIn handIn = new HandIn();
         while(System.currentTimeMillis() - startTime < 7500){
             try{
                 Thread.sleep(500);
@@ -141,7 +141,7 @@ public class LetUsGetMoney {
                 e.printStackTrace();
             }
         }
-        handIn.mouseClick();
+        handIn.mouseClick(finalResult);
         System.out.println("finalTime :" + (System.currentTimeMillis() - startTime));
 
     }

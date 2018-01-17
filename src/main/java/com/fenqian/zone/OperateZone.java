@@ -1,5 +1,7 @@
 package com.fenqian.zone;
 
+import com.fenqian.click.HandIn;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -19,12 +21,15 @@ public class OperateZone implements MouseListener, MouseMotionListener, MouseWhe
     private int[] resolutionOfScreen;
     private Frame f = new Frame("getAppZone");
 
-    private int[][] coordinates = new int[10][2];
+    private int[][] coordinates = new int[13][2];
     private String[] coordinateLabels = {
             "simulatorLeftTop            ","simulatorRightBotton        ",
             "questionAndAnswerLeftTop    ","questionAndAnswerRightBotton",
             "answer1LeftTop              ","answer1RightBotton          ",
-            "answer2LeftTop              ","answer2RightBotton          ",};
+            "answer2LeftTop              ","answer2RightBotton          ",
+            "answer3LeftTop              ","answer3RightBotton          ",
+            "answer1Point                ","answer2Point                ",
+            "answer3Point                "};
     private int coordinateIndex = 0;
     private boolean rightClickFlag = false;
     private boolean setFinishFlag = false;
@@ -56,34 +61,61 @@ public class OperateZone implements MouseListener, MouseMotionListener, MouseWhe
                 e.printStackTrace();
             }
         }
+        writeCoordinatesToFile("coordinates1.txt");
+        return coordinates;
+    }
 
+    public int[][] caculateCoordinates(){
+        float scale = ((coordinates[1][0] - coordinates[0][0])/ 72 +
+                (coordinates[1][1] - coordinates[0][1]) / 128) / 2;
+        System.out.println(scale);
+        coordinates[2][0] = (int)(scale * 3) + coordinates[0][0];
+        coordinates[2][1] = (int)(scale * 33) + coordinates[0][1];
+        coordinates[3][0] = (int)(scale * 69) + coordinates[0][0];
+        coordinates[3][1] = (int)(scale * 63) + coordinates[0][1];
+        coordinates[10][0] = (int)(scale * 36) + coordinates[0][0];
+        coordinates[10][1] = (int)(scale * 36) + coordinates[0][1];
+        coordinates[11][0] = (int)(scale * 36) + coordinates[0][0];
+        coordinates[11][1] = (int)(scale * 46) + coordinates[0][1];
+        coordinates[12][0] = (int)(scale * 36) + coordinates[0][0];
+        coordinates[12][1] = (int)(scale * 56) + coordinates[0][1];
+        writeCoordinatesToFile("coordinates2.txt");
+        return coordinates;
+
+    }
+    private void writeCoordinatesToFile(String fileName){
         System.out.println("try to write file");
-        File file = new File("coordinates.txt");
-        String fileName = "coordinates.txt";
-
         try{
             PrintWriter out = new PrintWriter(
                     new BufferedWriter(new FileWriter(fileName))
             );
-            for (int i = 0; i < 8; i++){
-//                System.out.println("try to write file");
+            for (int i = 0; i < 13; i++){
                 out.printf("%s : %d-%d \n",coordinateLabels[i], coordinates[i][0], coordinates[i][1]);
-
             }
             System.out.println("file wrote donw!");
             out.close();
         } catch (IOException e){
             e.printStackTrace();
         }
-
-//        file.
-        return coordinates;
     }
 
     public static void main(String[] args){
-        int[] resulotion = {1920, 1080};
-        OperateZone operateZone = new OperateZone(resulotion);
+        int[] resolution = {1920, 1080};
+        OperateZone operateZone = new OperateZone(resolution);
         operateZone.getOperateZone();
+        int[][] coordinates = operateZone.caculateCoordinates();
+
+
+        HandIn handIn = new HandIn();
+//        handIn.mouseClick(0);
+        handIn.mouseClick(2);
+        handIn.mouseClick(2);
+        handIn.mouseClick(2);
+        handIn.mouseClick(2);
+//        handIn.mouseClick(0);
+//        handIn.mouseClick(1);
+//        handIn.mouseClick(1);
+//        handIn.mouseClick(2);
         try {
             Thread.sleep(10000);
         }catch (InterruptedException e){
