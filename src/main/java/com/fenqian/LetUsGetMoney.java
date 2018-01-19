@@ -28,63 +28,6 @@ public class LetUsGetMoney {
     private int height = 360;
     private String lastQuestionKeyWord = "Nothing";
 
-    public void start() {
-
-
-        boolean imageValid = false;
-        ScreenShotImage screenShotImage = new ScreenShotImage();
-        BufferedImage bufferedImage = screenShotImage.getBufferedImage(x, y, width, height);
-        if (screenShotImage.isValidImage()){
-            imageValid = true;
-        }
-
-        while (!imageValid){
-            bufferedImage = screenShotImage.getBufferedImage(x, y, width, height);
-            if(screenShotImage.isValidImage()){
-                imageValid = true;
-            }
-        }
-
-        Long beginOfImageDectect = System.currentTimeMillis();
-        AliOCR aliOCR = new AliOCR();
-
-        question = aliOCR.parseReslut(aliOCR.callAliOcrAPI(aliOCR.getBase64Code(bufferedImage)))[0];
-
-        String originalWords = new TessOCR().getOCRByBufferedImage(bufferedImage);
-
-        System.out.println("----->Original word:");
-        System.out.println(originalWords);
-        System.out.println("----->Image resolve time:");
-        System.out.println(System.currentTimeMillis() - beginOfImageDectect);
-
-        //detect if this image is valid
-        if (!originalWords.contains(QUESTION_FLAG)) {
-            System.out.println("There is no '?' in image");
-        }
-        if (originalWords.contains(lastQuestionKeyWord)) {
-            System.out.println("same question");
-        }
-
-        if (originalWords.contains(QUESTION_FLAG) && !originalWords.contains(lastQuestionKeyWord)) {
-
-            Information information = new Information(originalWords);
-            lastQuestionKeyWord = information.getQuestionKeyWord();
-            this.question = information.getQuestion();
-            this.answers = information.getAns();
-
-            System.out.println("Question is:");
-            System.out.println(question);
-            System.out.println("Answer is :");
-            int numberOfAns = answers.length;
-            for(int i = 0; i < numberOfAns; i++){
-                System.out.println((i + 1) + ":" + answers[i]);
-            }
-
-            beginSearch();
-        }
-    }
-
-
     public void startWithAliOCR(){
         boolean imageValid = false;
         int recaptureCount = 0;
@@ -134,74 +77,23 @@ public class LetUsGetMoney {
 
         System.out.println("totalTime :" + (endTime - startTime));
         HandIn handIn = new HandIn();
-        while(System.currentTimeMillis() - startTime < 7500){
+        while(System.currentTimeMillis() - startTime < 3500){
             try{
                 Thread.sleep(500);
             } catch (InterruptedException e){
                 e.printStackTrace();
             }
         }
-        handIn.mouseClick(finalResult);
-        System.out.println("finalTime :" + (System.currentTimeMillis() - startTime));
+//        auto hand in result with keyboard
 
-    }
+//handin twice to make sure handin success!
+        for(int i = 0; i < 2 ; i ++){
+//            click the app zone , to focus on this APP
+            handIn.mouseClick(3);
+            handIn.keyboardClick(finalResult);
+            System.out.println("finalTime :" + (System.currentTimeMillis() - startTime));
 
-    private void beginSearch(){
-        long countQuestion = 1;
-        int maxIndex = 0;
-
-        Search serachQuestion = new Search(question);
-
-        ArrayBlockingQueue<Runnable> workQuenue = new ArrayBlockingQueue<Runnable>(5);
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5,10,
-                200, TimeUnit.MINUTES,workQuenue, Executors.defaultThreadFactory(),new RejectedExecutionHandlerForSearch());
-
-        FutureTask<Long> futureQuestion = new FutureTask<Long>(new SearchAndOpen(question));
-        new Thread(futureQuestion).start();
-        for (int i = 0; i < NUM_OF_ANSWERS; i++) {
-//            searchQuestionAndAnswer[i] = new Search(question + " " + answers[i]);
-//            searchAnswers[i] = new Search(answers[i]);
-
-//            futureQA[i] = new FutureTask<Long>(searchQuestionAndAnswer[i]);
-//            futureAnswers[i] = new FutureTask<Long>(searchAnswers[i]);
-//            new Thread(futureQA[i]).start();
-//            new Thread(futureAnswers[i]).start();
         }
-        try {
-            while (!futureQuestion.isDone()) {}
-            countQuestion = futureQuestion.get();
-            for (int i = 0; i < NUM_OF_ANSWERS; i++) {
-//                while (!futureQA[i].isDone()) {}
-//                countQuestionAndAnswer[i] = futureQA[i].get();
-//                while (!futureAnswers[i].isDone()) {}
-//                countAnswer[i] = futureAnswers[i].get();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        float[] ans = new float[NUM_OF_ANSWERS];
-        for (int i = 0; i < NUM_OF_ANSWERS; i++) {
-//            ans[i] = (float)countQuestionAndAnswer[i] / (float)(countQuestion * countAnswer[i]);
-            maxIndex = (ans[i]>ans[maxIndex] ) ? i : maxIndex;
-        }
-        //根据pmi值进行打印搜索结果
-        int[] rank=rank(ans);
-        for (int i : rank) {
-            System.out.print(answers[i]);
-//            System.out.print(" countQuestionAndAnswer:"+countQuestionAndAnswer[i]);
-//            System.out.print(" countAnswer:"+countAnswer[i]);
-            System.out.println(" ans:"+ans[i]);
-        }
-
-        System.out.println("--------最终结果-------");
-        System.out.println(answers[maxIndex]);
-        endTime = System.currentTimeMillis();
-        float excTime = (float) (endTime - startTime) / 1000;
-
-        System.out.println("执行时间：" + excTime + "s");
-
 
     }
 
@@ -217,18 +109,5 @@ public class LetUsGetMoney {
             }
         }
         return rank;
-
-    }
-
-
-}
-
-
-/*
-
-    private static void begainSearch(){
-
-
     }
 }
-*/

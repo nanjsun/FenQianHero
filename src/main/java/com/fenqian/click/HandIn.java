@@ -15,7 +15,7 @@ public class HandIn {
     private int[] optionA = {960,340};
     private int[] optionB = {960,420};
     private int[] optionC = {960,500};
-    private int[] optionD = {960,580};
+    private int[] optionD = {70,550};
     private int CLICK_TIME = 1;
 
     public HandIn(){
@@ -61,12 +61,45 @@ public class HandIn {
         }
     }
 
+    public void keyboardClick(int option){
+        switch (option){
+            case 0:
+                robot.keyPress(KeyEvent.VK_A);
+                robot.delay(100);
+                robot.keyRelease(KeyEvent.VK_A);
+                System.out.println("A is pressed!");
+                break;
+            case 1:
+                robot.keyPress(KeyEvent.VK_B);
+                robot.delay(100);
+                robot.keyRelease(KeyEvent.VK_B);
+                System.out.println("B is pressed!");
+                break;
+            case 2:
+                robot.keyPress(KeyEvent.VK_C);
+                robot.delay(100);
+                robot.keyRelease(KeyEvent.VK_C);
+                System.out.println("C is pressed!");
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
     public static void main(String[] args){
         HandIn handIn = new HandIn();
-        handIn.mouseClick(0);
-        handIn.mouseClick(1);
-        handIn.mouseClick(2);
-        handIn.mouseClick(3);
+//        handIn.mouseClick(0);
+//        handIn.mouseClick(0);
+        handIn.keyboardClick(0);
+        handIn.keyboardClick(1);
+        handIn.keyboardClick(2);
+
+
+//        handIn.mouseClick(1);
+//        handIn.mouseClick(2);
+//        handIn.mouseClick(3);
 //        handIn.mouseClick(4);
     }
 }
