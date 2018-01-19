@@ -96,6 +96,12 @@
             <version>1.2.44</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.baidu.aip</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
     </dependencies>
 
 

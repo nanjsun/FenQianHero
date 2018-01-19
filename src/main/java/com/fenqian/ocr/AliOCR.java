@@ -132,7 +132,7 @@ public class AliOCR {
 
     public static void main(String[] args) {
         AliOCR aliOCR = new AliOCR();
-        BufferedImage bufferedImage = aliOCR.getBufferedImage("./photos/3.png");
+        BufferedImage bufferedImage = aliOCR.getBufferedImage("./photos/4.png");
         System.out.println(bufferedImage.toString());
         String base64Code = aliOCR.getBase64Code(bufferedImage);
         String jsonResult = aliOCR.callAliOcrAPI(base64Code);

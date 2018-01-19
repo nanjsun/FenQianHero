@@ -1,6 +1,7 @@
 target/
 .idea/
 *.jpg
+*.txt
 photos/
 .idea/workspace.xml
 FenQianHero.iml

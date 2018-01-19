@@ -106,10 +106,10 @@ public class OperateZone implements MouseListener, MouseMotionListener, MouseWhe
         int[][] coordinates = operateZone.caculateCoordinates();
 
 
-        HandIn handIn = new HandIn();
+        HandIn handIn = new HandIn(coordinates);
 //        handIn.mouseClick(0);
-        handIn.mouseClick(2);
-        handIn.mouseClick(2);
+        handIn.mouseClick(0);
+        handIn.mouseClick(1);
         handIn.mouseClick(2);
         handIn.mouseClick(2);
 //        handIn.mouseClick(0);
