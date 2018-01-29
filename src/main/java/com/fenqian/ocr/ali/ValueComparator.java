@@ -1,4 +1,4 @@
-package com.fenqian.ocr;
+package com.fenqian.ocr.ali;
 
 import java.util.Comparator;
 import java.util.Map;

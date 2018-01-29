@@ -1,4 +1,4 @@
-package com.fenqian.ocr;
+package com.fenqian.ocr.ali;
 
 /**
  * FenQianHero class

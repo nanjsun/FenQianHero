@@ -2,14 +2,13 @@ package com.fenqian;
 
 import com.fenqian.click.HandIn;
 import com.fenqian.image.ScreenShotImage;
-import com.fenqian.ocr.AliOCR;
+import com.fenqian.ocr.ali.AliOCR;
+import com.fenqian.ocr.baidu.BaiduOCR;
 import com.fenqian.search.SearchQuestion;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.ServiceConfigurationError;
-import java.util.concurrent.*;
 
 /**
  * @author nanj
@@ -17,7 +16,7 @@ import java.util.concurrent.*;
 public class LetUsGetMoney {
     private final int NUM_OF_ANSWERS = 2;
     private final String QUESTION_FLAG="?";
-    private String[] questionAndAnswer = new String[4];
+    private String[] questionAndOptions = new String[4];
     private String[] answers = new String[3];
     private String question;
     private long startTime;
@@ -27,8 +26,10 @@ public class LetUsGetMoney {
     private int width = 600;
     private int height = 360;
     private String lastQuestionKeyWord = "Nothing";
+    private String ocrSupplier = "baidu";
 
-    public void startWithAliOCR(){
+
+    public void startWithOnlineOCR() throws IOException{
         boolean imageValid = false;
         int recaptureCount = 0;
         ScreenShotImage screenShotImage = new ScreenShotImage();
@@ -53,17 +54,29 @@ public class LetUsGetMoney {
         }
         startTime = System.currentTimeMillis();
 
-        Long beginOfImageDectect = System.currentTimeMillis();
-        AliOCR aliOCR = new AliOCR();
-        questionAndAnswer = aliOCR.parseReslut(aliOCR.callAliOcrAPI(aliOCR.getBase64Code(bufferedImage)));
-        question = questionAndAnswer[0];
-        System.out.println("questionAndAnswer size:"  + questionAndAnswer.length);
-
-        for(int i = 0; i < questionAndAnswer.length -1 ; i ++){
-            this.answers[i] = this.questionAndAnswer[i +1];
+        if("baidu".equals(ocrSupplier)){
+            BaiduOCR baiduOCR = new BaiduOCR();
+            baiduOCR.parseImage(bufferedImage);
+            System.out.println("print the result from baidu");
+            questionAndOptions = baiduOCR.getQuestionAndOptions();
+            for (int i = 0; i < 4; i ++){
+                System.out.println("baidu:" + questionAndOptions[i]);
+            }
+        } else {
+            AliOCR aliOCR = new AliOCR();
+            questionAndOptions = aliOCR.parseReslut(aliOCR.callAliOcrAPI(aliOCR.getBase64Code(bufferedImage)));
         }
 
-        SearchQuestion searchQuestion = new SearchQuestion(questionAndAnswer, answers);
+
+
+        question = questionAndOptions[0];
+        System.out.println("questionAndOptions size:"  + questionAndOptions.length);
+
+        for(int i = 0; i < questionAndOptions.length -1 ; i ++){
+            this.answers[i] = this.questionAndOptions[i +1];
+        }
+
+        SearchQuestion searchQuestion = new SearchQuestion(questionAndOptions, answers);
         try {
             searchQuestion.search(question);
         } catch (IOException e){
@@ -95,19 +108,5 @@ public class LetUsGetMoney {
 
         }
 
-    }
-
-    private int[] rank(float[] floats){
-        int[] rank=new int[NUM_OF_ANSWERS];
-        float[] f= Arrays.copyOf(floats,3);
-        Arrays.sort(f);
-        for (int i = 0; i < NUM_OF_ANSWERS; i++) {
-            for (int j = 0; j < NUM_OF_ANSWERS; j++) {
-                if(f[i]==floats[j]){
-                    rank[i]=j;
-                }
-            }
-        }
-        return rank;
     }
 }
