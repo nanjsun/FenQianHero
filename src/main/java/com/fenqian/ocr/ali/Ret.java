@@ -1,6 +1,4 @@
-package com.fenqian.ocr;
-
-import com.fenqian.ocr.Rect;
+package com.fenqian.ocr.ali;
 
 /**
  * FenQianHero class

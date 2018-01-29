@@ -2,13 +2,12 @@ package com.fenqian;
 
 import com.fenqian.click.HandIn;
 import com.fenqian.image.ScreenShotImage;
-import com.fenqian.ocr.AliOCR;
+import com.fenqian.ocr.ali.AliOCR;
 import com.fenqian.search.SearchQuestion;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.ServiceConfigurationError;
 import java.util.concurrent.*;
 
 /**

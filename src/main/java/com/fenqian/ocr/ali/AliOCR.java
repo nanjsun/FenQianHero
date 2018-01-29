@@ -1,26 +1,60 @@
-package com.fenqian.ocr;
+package com.fenqian.ocr.ali;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
+import com.fenqian.ocr.OcrApi;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 
-public class AliOCR {
+public class AliOCR implements OcrApi {
+    private String appcode = "17f0a3c27cb74e3f95a6f5ae731761fc";
     private BufferedImage bufferedImage;
     private Map<String, String> headers = new HashMap<String, String>();
 
     private String jsonResult;
 
+    private String[] questionAndOptions = new String[4];
+
+
+
+    @Override
+    public void parseImage(BufferedImage bufferedImage){
+        this.bufferedImage = bufferedImage;
+        String encodeImage = getBase64Code(this.bufferedImage);
+
+        jsonResult = callAliOcrAPI(encodeImage);
+
+
+    }
+
+    @Override
+    public void parseImage(String filePath){
+        try {
+            bufferedImage = ImageIO.read(new File(filePath));
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        parseImage(bufferedImage);
+    }
+
+
+
+    @Override
+    public String[] getQuestionAndOptions(){
+        questionAndOptions = parseReslut(jsonResult);
+        return questionAndOptions;
+    }
+
     
     public String callAliOcrAPI(String base64Code){
         //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
-        String appcode = "17f0a3c27cb74e3f95a6f5ae731761fc";
         headers.put("Authorization", "APPCODE " + appcode);
         //根据API的要求，定义相对应的Content-Type
         headers.put("Content-Type", "application/json; charset=UTF-8");
@@ -135,6 +169,7 @@ public class AliOCR {
         BufferedImage bufferedImage = aliOCR.getBufferedImage("./photos/3.png");
         System.out.println(bufferedImage.toString());
         String base64Code = aliOCR.getBase64Code(bufferedImage);
+
         String jsonResult = aliOCR.callAliOcrAPI(base64Code);
         System.out.println(jsonResult);
 //        String jsonResult = "{\"request_id\":\"20180113200821_48cde439759dfd04f7aeb174223bf1eb\",\"ret\":[{\"prob\":0.99955934286117554,\"rect\":{\"angle\":-90,\"height\":266,\"left\":364.5,\"top\":1,\"width\":23},\"word\":\"这首歌改编的舞蹈在抖音大\"},{\"prob\":0.99690848588943481,\"rect\":{\"angle\":-90,\"height\":133,\"left\":155,\"top\":1,\"width\":17},\"word\":\".《Panama》\"},{\"prob\":0.98947912454605103,\"rect\":{\"angle\":0,\"height\":20.999996185302734,\"left\":156,\"top\":75,\"width\":281.99993896484375},\"word\":\"这个舞蹈被大部分人称为\"},{\"prob\":0.98642551898956299,\"rect\":{\"angle\":0,\"height\":17.999996185302734,\"left\":86,\"top\":176,\"width\":60.999992370605469},\"word\":\"拍手舞\"},{\"prob\":0.98394185304641724,\"rect\":{\"angle\":-90,\"height\":88,\"left\":120.5,\"top\":215.5,\"width\":17},\"word\":\"C哩C哩舞\"},{\"prob\":0.96577662229537964,\"rect\":{\"angle\":0,\"height\":20,\"left\":86,\"top\":324,\"width\":101},\"word\":\"嘀哩嘀哩舞\"}],\"success\":true}";
