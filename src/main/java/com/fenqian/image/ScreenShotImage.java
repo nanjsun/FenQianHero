@@ -34,6 +34,7 @@ public class ScreenShotImage {
 
         ScreenShotImage screenShotImage = new ScreenShotImage();
         BufferedImage bufferedImage = screenShotImage.getBufferedImage(660, 140, 600, 360);
+//        BufferedImage bufferedImage = screenShotImage.getBufferedImage(260, 140, 800, 800);
         try {
             ImageIO.write(bufferedImage, "png", imageFile);
 

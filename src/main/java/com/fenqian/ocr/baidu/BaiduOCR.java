@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * FenQianHero class
@@ -27,7 +28,9 @@ public class BaiduOCR implements OcrApi{
     private AipOcr client;
     private JSONObject result;
 
-    long startTime;
+    private long startTime;
+
+    private int[] questionAndOptionsCoordinates = new int[16];
 
     private String[] questionAndOption = new String[4];
     private HashMap<String, String> options = new HashMap<String, String>();
@@ -70,14 +73,35 @@ public class BaiduOCR implements OcrApi{
         int ocrCount = baiduOcrResult.getWords_result_num();
         for(int i = 0; i < OPTION_NUMBER; i++){
             questionAndOption[OPTION_NUMBER - i] = baiduOcrResult.getWords_result().get(ocrCount - i - 1).getWords();
+
+            questionAndOptionsCoordinates[(OPTION_NUMBER -i) * 4 + 0] = baiduOcrResult.getWords_result()
+                    .get(ocrCount - i - 1).getMin_finegrained_vertexes_location().get(0).getX();
+            questionAndOptionsCoordinates[(OPTION_NUMBER -i) * 4 + 1] = baiduOcrResult.getWords_result()
+                    .get(ocrCount - i - 1).getMin_finegrained_vertexes_location().get(0).getY();
+            questionAndOptionsCoordinates[(OPTION_NUMBER -i) * 4 + 2] = baiduOcrResult.getWords_result()
+                    .get(ocrCount - i - 1).getMin_finegrained_vertexes_location().get(2).getX();
+            questionAndOptionsCoordinates[(OPTION_NUMBER -i) * 4 + 3] = baiduOcrResult.getWords_result()
+                    .get(ocrCount - i - 1).getMin_finegrained_vertexes_location().get(2).getY();
         }
         StringBuffer question = new StringBuffer();
         for(int i = 0; i < ocrCount - OPTION_NUMBER; i ++){
             question.append(baiduOcrResult.getWords_result().get(i).getWords());
             questionAndOption[0] = question.toString();
+
+            questionAndOptionsCoordinates[0] = baiduOcrResult.getWords_result().get(0)
+                    .getMin_finegrained_vertexes_location().get(0).getX();
+            questionAndOptionsCoordinates[1] = baiduOcrResult.getWords_result().get(0)
+                    .getMin_finegrained_vertexes_location().get(0).getY();
+            questionAndOptionsCoordinates[2] = baiduOcrResult.getWords_result().get(0)
+                    .getMin_finegrained_vertexes_location().get(2).getX();
+            questionAndOptionsCoordinates[3] = baiduOcrResult.getWords_result().get(0)
+                    .getMin_finegrained_vertexes_location().get(2).getY();
+
 //            questionAndOption[0] = questionAndOption[0].
         }
         System.out.println("resolve time :" + (System.currentTimeMillis() - startTime));
+
+
         return questionAndOption;
 
     }
@@ -85,16 +109,23 @@ public class BaiduOCR implements OcrApi{
     public static void main(String[] args) throws IOException{
         BaiduOCR baiduOCR = new BaiduOCR();
 
-        String file = "./photos/4.png";
+        String file = "./photos/9.png";
 
         BufferedImage bufferedImage = ImageIO.read(new File(file));
 
         baiduOCR.parseImage(bufferedImage);
         String[] result = baiduOCR.getQuestionAndOptions();
 
-        System.out.println(result[0]);
-        System.out.println(result[1]);
-        System.out.println(result[2]);
-        System.out.println(result[3]);
+        for(int i = 0; i < 4; i++ ){
+            System.out.println(result[i]);
+
+            System.out.println("leftTop :" + baiduOCR.questionAndOptionsCoordinates[i * 4 + 0] + "-" +
+                    baiduOCR.questionAndOptionsCoordinates[i * 4 + 1]);
+            System.out.println("rightBottom :" + baiduOCR.questionAndOptionsCoordinates[i * 4  + 2] + "-" +
+                    baiduOCR.questionAndOptionsCoordinates[i * 4  + 3]);
+        }
+
+
+
     }
 }

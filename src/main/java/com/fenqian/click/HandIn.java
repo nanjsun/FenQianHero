@@ -53,6 +53,17 @@ public class HandIn {
         }
         robot.mouseMove(x, y);
 //        click this position 2 times
+        mouseClick(x, y);
+    }
+
+    public void mouseClick(int x, int y){
+        try{
+            robot = new Robot();
+        } catch (AWTException e){
+            e.printStackTrace();
+        }
+        robot.mouseMove(x, y);
+//        click this position 2 times
         for(int i = 0; i < CLICK_TIME; i ++){
             robot.mousePress(KeyEvent.BUTTON1_MASK);
             robot.delay(0);
@@ -86,20 +97,11 @@ public class HandIn {
         }
     }
 
-
-
     public static void main(String[] args){
         HandIn handIn = new HandIn();
-//        handIn.mouseClick(0);
-//        handIn.mouseClick(0);
         handIn.keyboardClick(0);
         handIn.keyboardClick(1);
         handIn.keyboardClick(2);
 
-
-//        handIn.mouseClick(1);
-//        handIn.mouseClick(2);
-//        handIn.mouseClick(3);
-//        handIn.mouseClick(4);
     }
 }
