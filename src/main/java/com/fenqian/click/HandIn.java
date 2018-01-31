@@ -26,6 +26,18 @@ public class HandIn {
         optionC = coordinates[12];
     }
 
+    public HandIn(int[] coordiantes){
+//        optionA = {coordiantes[0],coordiantes[1]};
+        optionA[0] = coordiantes[0];
+        optionA[1] = coordiantes[1];
+
+        optionB[0] = coordiantes[2];
+        optionB[1] = coordiantes[3];
+
+        optionC[0] = coordiantes[4];
+        optionC[1] = coordiantes[5];
+    }
+
     public void mouseClick(int option){
         int x;
         int y;

@@ -6,8 +6,11 @@ import com.fenqian.image.ValidRegion;
 import com.fenqian.ocr.ali.AliOCR;
 import com.fenqian.ocr.baidu.BaiduOCR;
 import com.fenqian.search.SearchQuestion;
+import org.omg.CORBA.IMP_LIMIT;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -26,19 +29,28 @@ public class LetUsGetMoney {
     private int validRegionWidth = 600;
     private int validRegionHeight = 360;
 
-    private int globalRegionLeft = 100;
-    private int globalRegionTop = 100;
+    private int globalRegionLeft = 160;
+    private int globalRegionTop = 120;
     private int globalRegionWidth = 1000;
     private int globalRegionHeight = 1000;
+
+    private int[] optionCentralCoordinates = new int[6];
+
     private String lastQuestionKeyWord = "Nothing";
     private String ocrSupplier = "baidu";
 
 
-    public void init(){
+    public void init() {
         ScreenShotImage screenShotImage = new ScreenShotImage();
         BufferedImage globalImage = screenShotImage.getBufferedImage(globalRegionLeft,globalRegionTop,
                 globalRegionWidth,globalRegionHeight);
 
+        try {
+            File globaleImageFile = new File(".","./photos/globalImage.png");
+            ImageIO.write(globalImage,"png",globaleImageFile);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
         ValidRegion validRegion = new ValidRegion(globalImage);
         int[] validRegionCoordinate = validRegion.getValidRegion();
 
@@ -56,6 +68,14 @@ public class LetUsGetMoney {
         ScreenShotImage screenShotImage = new ScreenShotImage();
         BufferedImage bufferedImage = screenShotImage.getBufferedImage(validRegionLeft, validRegionTop,
                 validRegionWidth, validRegionHeight);
+
+        try {
+            File validRegionImageFile = new File(".", "./photos/validRegion.jpg");
+            ImageIO.write(bufferedImage,"jpg",validRegionImageFile);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
         if(screenShotImage.isValidImage()){
             imageValid = true;
         } else {
@@ -82,6 +102,7 @@ public class LetUsGetMoney {
             baiduOCR.parseImage(bufferedImage);
             System.out.println("print the result from baidu");
             questionAndOptions = baiduOCR.getQuestionAndOptions();
+            optionCentralCoordinates = baiduOCR.getOptionCentralCoordinates();
             for (int i = 0; i < 4; i ++){
                 System.out.println("baidu:" + questionAndOptions[i]);
             }
@@ -110,7 +131,9 @@ public class LetUsGetMoney {
         System.out.println("finalResult :" + finalResult + "---" + answers[finalResult]);
 
         System.out.println("totalTime :" + (endTime - startTime));
-        HandIn handIn = new HandIn();
+
+        HandIn handIn = new HandIn(optionCentralCoordinates);
+
         while(System.currentTimeMillis() - startTime < 3500){
             try{
                 Thread.sleep(500);

@@ -11,7 +11,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * FenQianHero class
@@ -106,15 +105,27 @@ public class BaiduOCR implements OcrApi{
 
     }
 
+    public int[] getOptionCentralCoordinates(){
+        int[] optionCentralCoordinates = new int[6];
+        for(int i = 0; i < 3; i++){
+            optionCentralCoordinates[i * 2] = (questionAndOptionsCoordinates[i * 4 + 4] +
+                    questionAndOptionsCoordinates[i * 4 + 6]) / 2;
+            optionCentralCoordinates[i * 2 + 1] = (questionAndOptionsCoordinates[i * 4 + 5] +
+                    questionAndOptionsCoordinates[i * 4 + 7]) / 2;
+        }
+        return optionCentralCoordinates;
+    }
+
     public static void main(String[] args) throws IOException{
         BaiduOCR baiduOCR = new BaiduOCR();
 
-        String file = "./photos/9.png";
+        String file = "./photos/3.png";
 
         BufferedImage bufferedImage = ImageIO.read(new File(file));
 
         baiduOCR.parseImage(bufferedImage);
         String[] result = baiduOCR.getQuestionAndOptions();
+        int[] optionsCentralCoordiantes = baiduOCR.getOptionCentralCoordinates();
 
         for(int i = 0; i < 4; i++ ){
             System.out.println(result[i]);
@@ -123,7 +134,12 @@ public class BaiduOCR implements OcrApi{
                     baiduOCR.questionAndOptionsCoordinates[i * 4 + 1]);
             System.out.println("rightBottom :" + baiduOCR.questionAndOptionsCoordinates[i * 4  + 2] + "-" +
                     baiduOCR.questionAndOptionsCoordinates[i * 4  + 3]);
+            if(i > 0){
+                System.out.println("centrl point:" + optionsCentralCoordiantes[i * 2 - 2] + "-" + optionsCentralCoordiantes[i * 2 - 1]);
+
+            }
         }
+
 
 
 

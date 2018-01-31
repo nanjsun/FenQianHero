@@ -103,10 +103,10 @@ public class ValidRegion {
 //        find valid region right
         for(int i = 0; i < (width - firstFoundValidX) / STEP_LENGTH -1; i ++){
             validRegionRight = firstFoundValidX + i * STEP_LENGTH;
-            if(!isWhitePoint(validRegionRight, firstFoundValidY)
-                    && !isWhitePoint(validRegionRight + STEP_LENGTH, firstFoundValidY)
-                    && !isWhitePoint(validRegionRight, firstFoundValidY - STEP_LENGTH)
-                    && !isWhitePoint(validRegionRight - STEP_LENGTH, firstFoundValidY - STEP_LENGTH)){
+            if(!isWhitePoint(validRegionRight, firstFoundValidY + 30)
+                    && !isWhitePoint(validRegionRight + STEP_LENGTH, firstFoundValidY + 30)
+                    && !isWhitePoint(validRegionRight, firstFoundValidY - STEP_LENGTH + 30)
+                    && !isWhitePoint(validRegionRight - STEP_LENGTH, firstFoundValidY - STEP_LENGTH + 3)){
 
                 System.out.println("right:" + validRegionRight);
                 validRegion[2] = validRegionRight;
