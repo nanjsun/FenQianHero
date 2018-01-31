@@ -25,7 +25,7 @@ public class ValidRegion {
 
 
     public int[] getValidRegion(){
-//        searchValidRegion();
+        searchValidRegion();
         return validRegion;
     }
 

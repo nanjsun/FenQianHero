@@ -2,13 +2,13 @@ package com.fenqian;
 
 import com.fenqian.click.HandIn;
 import com.fenqian.image.ScreenShotImage;
+import com.fenqian.image.ValidRegion;
 import com.fenqian.ocr.ali.AliOCR;
 import com.fenqian.ocr.baidu.BaiduOCR;
 import com.fenqian.search.SearchQuestion;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * @author nanj
@@ -21,26 +21,49 @@ public class LetUsGetMoney {
     private String question;
     private long startTime;
     private long endTime;
-    private int x = 660;
-    private int y = 140;
-    private int width = 600;
-    private int height = 360;
+    private int validRegionLeft = 660;
+    private int validRegionTop = 140;
+    private int validRegionWidth = 600;
+    private int validRegionHeight = 360;
+
+    private int globalRegionLeft = 100;
+    private int globalRegionTop = 100;
+    private int globalRegionWidth = 1000;
+    private int globalRegionHeight = 1000;
     private String lastQuestionKeyWord = "Nothing";
     private String ocrSupplier = "baidu";
 
+
+    public void init(){
+        ScreenShotImage screenShotImage = new ScreenShotImage();
+        BufferedImage globalImage = screenShotImage.getBufferedImage(globalRegionLeft,globalRegionTop,
+                globalRegionWidth,globalRegionHeight);
+
+        ValidRegion validRegion = new ValidRegion(globalImage);
+        int[] validRegionCoordinate = validRegion.getValidRegion();
+
+        validRegionLeft = validRegionCoordinate[0] + globalRegionLeft;
+        validRegionTop = validRegionCoordinate[1] + globalRegionTop;
+
+        validRegionWidth = validRegionCoordinate[2] - validRegionCoordinate[0];
+        validRegionHeight = validRegionCoordinate[3] - validRegionCoordinate[1];
+
+    }
 
     public void startWithOnlineOCR() throws IOException{
         boolean imageValid = false;
         int recaptureCount = 0;
         ScreenShotImage screenShotImage = new ScreenShotImage();
-        BufferedImage bufferedImage = screenShotImage.getBufferedImage(x, y, width, height);
+        BufferedImage bufferedImage = screenShotImage.getBufferedImage(validRegionLeft, validRegionTop,
+                validRegionWidth, validRegionHeight);
         if(screenShotImage.isValidImage()){
             imageValid = true;
         } else {
             while (!imageValid){
                 recaptureCount ++;
                 System.out.println("invalid image, recapturing imags, count:" + recaptureCount);
-                bufferedImage = screenShotImage.getBufferedImage(x, y, width, height);
+                bufferedImage = screenShotImage.getBufferedImage(validRegionLeft, validRegionTop,
+                        validRegionWidth, validRegionHeight);
                 if(screenShotImage.isValidImage()){
                     imageValid = true;
                 }
@@ -66,8 +89,6 @@ public class LetUsGetMoney {
             AliOCR aliOCR = new AliOCR();
             questionAndOptions = aliOCR.parseReslut(aliOCR.callAliOcrAPI(aliOCR.getBase64Code(bufferedImage)));
         }
-
-
 
         question = questionAndOptions[0];
         System.out.println("questionAndOptions size:"  + questionAndOptions.length);
