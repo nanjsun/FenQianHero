@@ -18,8 +18,7 @@ public class HandIn {
     private int[] optionD = {70,550};
     private int CLICK_TIME = 1;
 
-    public HandIn(){
-    }
+
     public HandIn(int[][] coordinates){
         optionA = coordinates[10];
         optionB = coordinates[11];
@@ -27,6 +26,8 @@ public class HandIn {
     }
 
     public HandIn(int[] coordiantes){
+
+        System.out.println("init handin");
 //        optionA = {coordiantes[0],coordiantes[1]};
         optionA[0] = coordiantes[0];
         optionA[1] = coordiantes[1];
@@ -36,6 +37,8 @@ public class HandIn {
 
         optionC[0] = coordiantes[4];
         optionC[1] = coordiantes[5];
+    }
+    public HandIn(){
     }
 
     public void mouseClick(int option){

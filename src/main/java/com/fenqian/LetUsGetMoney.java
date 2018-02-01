@@ -6,7 +6,6 @@ import com.fenqian.image.ValidRegion;
 import com.fenqian.ocr.ali.AliOCR;
 import com.fenqian.ocr.baidu.BaiduOCR;
 import com.fenqian.search.SearchQuestion;
-import org.omg.CORBA.IMP_LIMIT;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -34,7 +33,8 @@ public class LetUsGetMoney {
     private int globalRegionWidth = 1000;
     private int globalRegionHeight = 1000;
 
-    private int[] optionCentralCoordinates = new int[6];
+    private int[] relativeOptionCentralCoordinates = new int[6];
+    private int[] absoluteOptionCentralCoordinates = new int[6];
 
     private String lastQuestionKeyWord = "Nothing";
     private String ocrSupplier = "baidu";
@@ -102,7 +102,16 @@ public class LetUsGetMoney {
             baiduOCR.parseImage(bufferedImage);
             System.out.println("print the result from baidu");
             questionAndOptions = baiduOCR.getQuestionAndOptions();
-            optionCentralCoordinates = baiduOCR.getOptionCentralCoordinates();
+            relativeOptionCentralCoordinates = baiduOCR.getOptionCentralCoordinates();
+            for(int i = 0; i < 3; i++){
+                absoluteOptionCentralCoordinates[i * 2] = relativeOptionCentralCoordinates[i * 2]
+                        + validRegionLeft;
+//                System.out.println("globalX:" + globalRegionLeft + "validX" + validRegionLeft + "ax" + relativeOptionCentralCoordinates[i * 2]);
+                absoluteOptionCentralCoordinates[i * 2 + 1] = relativeOptionCentralCoordinates[i * 2 + 1]
+                        + validRegionTop;
+//                System.out.println("globalY:" + globalRegionTop + "validY" + validRegionTop + "ay" + relativeOptionCentralCoordinates[i * 2 + 1]);
+
+            }
             for (int i = 0; i < 4; i ++){
                 System.out.println("baidu:" + questionAndOptions[i]);
             }
@@ -132,9 +141,10 @@ public class LetUsGetMoney {
 
         System.out.println("totalTime :" + (endTime - startTime));
 
-        HandIn handIn = new HandIn(optionCentralCoordinates);
+        HandIn handIn = new HandIn(absoluteOptionCentralCoordinates);
+        final int DELAY_TIME = 8000;
 
-        while(System.currentTimeMillis() - startTime < 3500){
+        while(System.currentTimeMillis() - startTime < DELAY_TIME){
             try{
                 Thread.sleep(500);
             } catch (InterruptedException e){
@@ -146,7 +156,7 @@ public class LetUsGetMoney {
 //handin twice to make sure handin success!
         for(int i = 0; i < 2 ; i ++){
 //            click the app zone , to focus on this APP
-            handIn.mouseClick(3);
+            handIn.mouseClick(finalResult);
             handIn.keyboardClick(finalResult);
             System.out.println("finalTime :" + (System.currentTimeMillis() - startTime));
 
