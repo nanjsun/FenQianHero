@@ -43,8 +43,8 @@ public class LetUsGetMoney {
     private BufferedImage validImage;
 
 //    sequence of: 0->xigua(dafault), 1->zhishichaoren, 2->bobo
-    private final int[] validRegionTopOffset = {0,30,25,40};
-    private final int[] validRegionBottonOffset = {0,50,50,40};
+    private final int[] validRegionTopOffset = {0,60,25,40};
+    private final int[] validRegionBottonOffset = {0,70,50,40};
     private int appIndex;
 
 
