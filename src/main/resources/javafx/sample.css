@@ -1,0 +1,14 @@
+.root {
+    -fx-background-color: honeydew;
+}
+.label {
+    -fx-font-size: 20;
+}
+
+.choice-box {
+    -fx-font-size: 12;
+}
+
+.text-area {
+    -fx-background-color: cornflowerblue;
+}

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="CENTER" hgap="10" prefHeight="600.0" prefWidth="800.0" stylesheets="javafx/sample.css" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fenqian.gui.javafx.Controller">
+   <ImageView fx:id="globalView" fitHeight="300" fitWidth="400" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+      <image>
+         <Image url="@../../../../../../Pictures/1.jpg" />
+      </image></ImageView>
+
+   <ImageView fx:id="validView" fitHeight="300" fitWidth="400" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+      <image>
+         <Image url="@../../../../../../Pictures/v2-2bed35d4fb581a8a40a71fd68e3aaee7_b.jpg" />
+      </image></ImageView>
+
+   <Button fx:id="start" alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" onAction="#start" prefHeight="40.0" prefWidth="150.0" text="let's go!" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+   <Button fx:id="searchValidRegion" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#searchValidRegion" prefHeight="40.0" prefWidth="150.0" text="searchValidRegion" wrapText="true" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+      <GridPane.margin>
+         <Insets left="30.0" />
+      </GridPane.margin></Button>
+   <Button fx:id="stop" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#sayHelloWorld" prefHeight="40.0" prefWidth="150.0" text="stop!" wrapText="true" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+      <GridPane.margin>
+         <Insets right="30.0" />
+      </GridPane.margin></Button>
+   <Label fx:id="countDown" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="114.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+
+      <GridPane.margin>
+         <Insets />
+      </GridPane.margin></Label>
+   <ChoiceBox id="appChoiceBox" fx:id="appChoiceBox" accessibleHelp="choice your app" prefHeight="20.0" prefWidth="150.0" value="- Select APP -" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      <items>
+         <FXCollections fx:factory="observableArrayList">
+         <String fx:value="- Select APP -" />
+         <String fx:value="XiGua" />
+         <String fx:value="ZhiShiChaoRen" />
+         <String fx:value="BoBo" />
+         </FXCollections>
+      </items>
+      <GridPane.margin>
+         <Insets left="30.0" />
+      </GridPane.margin>
+   </ChoiceBox>
+
+   <ChoiceBox id="ocrApiChoice" fx:id="ocrChoiceBox1" accessibleHelp="choice your ocr" layoutX="60.0" layoutY="414.0" prefHeight="20.0" prefWidth="150.0" value="Baidu" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+      <items>
+         <FXCollections fx:factory="observableArrayList">
+            <String fx:value="- Select OCR -" />
+            <String fx:value="Baidu" />
+            <String fx:value="Alibaba" />
+         </FXCollections>
+      </items>
+      <GridPane.margin>
+         <Insets right="30.0" />
+      </GridPane.margin>
+   </ChoiceBox>
+   <TextArea id="statusText" fx:id="statusText" prefHeight="200.0" prefWidth="200.0" text="status:&#10;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+   <Label layoutX="563.0" layoutY="400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="152.0" text="Countdown:" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <GridPane.margin>
+         <Insets left="20.0" />
+      </GridPane.margin>
+      <font>
+         <Font size="18.0" />
+      </font>
+   </Label>
+   <columnConstraints>
+      <ColumnConstraints minWidth="400.0" prefWidth="100.0" />
+      <ColumnConstraints minWidth="400.0" prefWidth="100.0" />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10" prefHeight="30.0" />
+      <RowConstraints minHeight="300" prefHeight="30.0" />
+      <RowConstraints minHeight="50.0" prefHeight="30.0" />
+      <RowConstraints minHeight="50.0" prefHeight="30.0" />
+      <RowConstraints minHeight="50.0" prefHeight="30.0" />
+
+   </rowConstraints>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+
+</GridPane>

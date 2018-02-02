@@ -1,6 +1,7 @@
 target/
 .idea/
 *.jpg
+*.png
 *.txt
 photos/
 .idea/workspace.xml

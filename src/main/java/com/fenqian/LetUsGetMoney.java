@@ -39,15 +39,24 @@ public class LetUsGetMoney {
     private String lastQuestionKeyWord = "Nothing";
     private String ocrSupplier = "baidu";
 
+    private BufferedImage globalImage;
+    private BufferedImage validImage;
 
-    public void init() {
+//    sequence of: 0->xigua(dafault), 1->zhishichaoren, 2->bobo
+    private final int[] validRegionTopOffset = {0,30,25,40};
+    private final int[] validRegionBottonOffset = {0,50,50,40};
+    private int appIndex;
+
+
+    public void init(int appIndex) {
+        this.appIndex = appIndex;
         ScreenShotImage screenShotImage = new ScreenShotImage();
-        BufferedImage globalImage = screenShotImage.getBufferedImage(globalRegionLeft,globalRegionTop,
+        globalImage = screenShotImage.getBufferedImage(globalRegionLeft,globalRegionTop,
                 globalRegionWidth,globalRegionHeight);
 
         try {
-            File globaleImageFile = new File(".","./photos/globalImage.png");
-            ImageIO.write(globalImage,"png",globaleImageFile);
+            File globaleImageFile = new File(".","./photos/globalImage.jpg");
+            ImageIO.write(globalImage,"jpg",globaleImageFile);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -55,10 +64,12 @@ public class LetUsGetMoney {
         int[] validRegionCoordinate = validRegion.getValidRegion();
 
         validRegionLeft = validRegionCoordinate[0] + globalRegionLeft;
-        validRegionTop = validRegionCoordinate[1] + globalRegionTop;
+        validRegionTop = validRegionCoordinate[1] + globalRegionTop + validRegionTopOffset[this.appIndex];
 
         validRegionWidth = validRegionCoordinate[2] - validRegionCoordinate[0];
-        validRegionHeight = validRegionCoordinate[3] - validRegionCoordinate[1];
+        validRegionHeight = validRegionCoordinate[3] - validRegionCoordinate[1] - validRegionBottonOffset[this.appIndex];
+        validImage = screenShotImage.getBufferedImage(validRegionLeft, validRegionTop,
+                validRegionWidth, validRegionHeight);
 
     }
 
@@ -68,9 +79,10 @@ public class LetUsGetMoney {
         ScreenShotImage screenShotImage = new ScreenShotImage();
         BufferedImage bufferedImage = screenShotImage.getBufferedImage(validRegionLeft, validRegionTop,
                 validRegionWidth, validRegionHeight);
+//        validImage = bufferedImage;
 
         try {
-            File validRegionImageFile = new File(".", "./photos/validRegion.jpg");
+            File validRegionImageFile = new File(".", "./photos/validImage.jpg");
             ImageIO.write(bufferedImage,"jpg",validRegionImageFile);
         } catch (IOException e){
             e.printStackTrace();
@@ -162,5 +174,13 @@ public class LetUsGetMoney {
 
         }
 
+    }
+
+    public BufferedImage getGlobalImage(){
+        return globalImage;
+    }
+
+    public BufferedImage getValidImage(){
+        return validImage;
     }
 }

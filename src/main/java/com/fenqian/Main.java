@@ -7,7 +7,7 @@ public class Main {
         LetUsGetMoney letUsGetMoney = new LetUsGetMoney();
         while (true){
             try {
-                letUsGetMoney.init();
+                letUsGetMoney.init(0);
                 letUsGetMoney.startWithOnlineOCR();
             } catch (IOException e){
                 e.printStackTrace();
