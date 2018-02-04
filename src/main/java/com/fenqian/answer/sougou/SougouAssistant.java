@@ -18,6 +18,14 @@ public class SougouAssistant implements OnlineAnswer {
     private String[] questionAndOptions = new String[4];
     private int answerIndex;
     private String jsonResponse;
+    private int appIndex;
+    private final String[] appCode = {"bwyx", "zscr", "cddh", "huajiao", "hjsm"};
+
+
+    public SougouAssistant(int appIndex){
+
+        this.appIndex = appIndex;
+    }
 
     @Override
     public String[] getQuestionAndOptions(){
@@ -30,7 +38,7 @@ public class SougouAssistant implements OnlineAnswer {
     }
 
     public void requestServer() throws Exception{
-        String url = "http://140.143.49.31/api/ans2?wdcallback=xx&key=bwyx";
+        String url = "http://140.143.49.31/api/ans2?wdcallback=xx&key=" + appCode[appIndex];
         String host = "140.143.49.31";
         String connections = "keep-alive";
         String accept = "*/*";
@@ -61,7 +69,7 @@ public class SougouAssistant implements OnlineAnswer {
 
         jsonResponse = rawResponse.substring(3, rawResponseLength - 1);
 //        System.out.println(rawResponse);
-        System.out.println(jsonResponse);
+//        System.out.println(jsonResponse);
     }
 
     public void parseJson(){
@@ -71,7 +79,7 @@ public class SougouAssistant implements OnlineAnswer {
 
         JsonAnswer jsonAnswer = JSON.parseObject(currentResult, JsonAnswer.class);
 
-        System.out.println(jsonAnswer.getResult());
+//        System.out.println(jsonAnswer.getResult());
 
 //        questionAndOptions[0] = jsonAnswer.getTitle();
 //        questionAndOptions[1] = jsonAnswer.setAnswers();
@@ -96,7 +104,7 @@ public class SougouAssistant implements OnlineAnswer {
     }
 
     public static void main(String[] args) throws Exception{
-        SougouAssistant sougouAssistant = new SougouAssistant();
+        SougouAssistant sougouAssistant = new SougouAssistant(4);
         sougouAssistant.requestServer();
         sougouAssistant.parseJson();
     }
