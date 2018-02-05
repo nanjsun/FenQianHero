@@ -77,6 +77,7 @@ public class LetUsGetMoney {
     public void startWithOnlineOCR() throws IOException{
 
         boolean imageValid = false;
+        boolean answerBoardValid = false;
         int recaptureCount = 0;
         ScreenShotImage screenShotImage = new ScreenShotImage();
         BufferedImage bufferedImage = screenShotImage.getBufferedImage(validRegionLeft, validRegionTop,
@@ -90,7 +91,7 @@ public class LetUsGetMoney {
             e.printStackTrace();
         }
 
-        if(screenShotImage.isValidImage()){
+        if(screenShotImage.isValidImage() && screenShotImage.isAnswerStatus()){
             imageValid = true;
         } else {
             while (!imageValid){
@@ -98,7 +99,7 @@ public class LetUsGetMoney {
                 System.out.println("invalid image, recapturing imags, count:" + recaptureCount);
                 bufferedImage = screenShotImage.getBufferedImage(validRegionLeft, validRegionTop,
                         validRegionWidth, validRegionHeight);
-                if(screenShotImage.isValidImage()){
+                if(screenShotImage.isValidImage() && screenShotImage.isAnswerStatus()){
                     imageValid = true;
                 }
                 try{
@@ -109,6 +110,7 @@ public class LetUsGetMoney {
 
             }
         }
+
         startTime = System.currentTimeMillis();
 
         if("baidu".equals(ocrSupplier)){

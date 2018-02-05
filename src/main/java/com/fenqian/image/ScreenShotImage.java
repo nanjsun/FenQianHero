@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PushbackInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,6 +25,11 @@ public class ScreenShotImage {
         this.bufferedImage = bfImage;
         return bfImage;
     }
+
+    public void readImage(String imagePath) throws IOException{
+        this.bufferedImage = ImageIO.read(new File(imagePath));
+    }
+
     public File getImage() {
         //image file name
         Date currentTime = new Date();
@@ -75,4 +81,54 @@ public class ScreenShotImage {
         return true;
     }
 
+    public boolean isAnswerStatus(){
+        int pixelPointSum = 0;
+        int pixelCount = 0;
+        boolean result = true;
+        int width = bufferedImage.getWidth();
+        int height = bufferedImage.getHeight();
+        for(int i = (height - 10) / 10; i > height / 30; --i){
+            pixelCount ++;
+            int x = width / 3;
+            int y = i * 10;
+            System.out.println("X - Y:" + x + ":" + y);
+            int pixel = bufferedImage.getRGB(x ,y);
+
+
+            int r = (pixel & 0xff0000) >> 16;
+            int g = (pixel &0xff00) >> 8;
+            int b = (pixel &0xff);
+            pixelPointSum = pixelPointSum + (r + g + b) / 3;
+            if((r < 60 && b > 200) || (r > 240 && g < 190)){
+                result = false;
+                break;
+            }
+
+
+//            System.out.println("pixel:" + (r + g + b) / 3 );
+//            sumPixel = sumPixel + pixel;
+        }
+//        if(pixelPointSum / pixelCount < 240){
+//            result = false;
+//        } else {
+//            result = true;
+//        }
+
+        System.out.println("pixelAverage:" + pixelPointSum / pixelCount );
+
+        System.out.println("status:" + result);
+        return result;
+    }
+
+    public static void main(String[] args) throws Exception{
+        ScreenShotImage screenShotImage = new ScreenShotImage();
+
+//        screenShotImage.readImage("./photos/2.png");
+//        screenShotImage.readImage("./photos/validImage.jpg");
+        screenShotImage.readImage("./photos/3.png");
+
+        Boolean status = screenShotImage.isAnswerStatus();
+        System.out.println(status);
+
+    }
 }
