@@ -3,6 +3,7 @@ package com.fenqian.answer.sougou;
 import com.alibaba.fastjson.JSON;
 import com.fenqian.answer.OnlineAnswer;
 
+import java.awt.font.ShapeGraphicAttribute;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -61,12 +62,15 @@ public class SougouAssistant implements OnlineAnswer {
         connection.setRequestProperty("Accept_Encoding", acceptEncoding);
 
         int responseCode = connection.getResponseCode();
+        while (responseCode != 200){
+            System.out.println("request faild,code:" + responseCode);
+            responseCode = connection.getResponseCode();
+        }
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(connection.getInputStream())
         );
         String rawResponse = in.readLine();
         int rawResponseLength = rawResponse.length();
-
         jsonResponse = rawResponse.substring(3, rawResponseLength - 1);
 //        System.out.println(rawResponse);
 //        System.out.println(jsonResponse);
@@ -104,7 +108,7 @@ public class SougouAssistant implements OnlineAnswer {
     }
 
     public static void main(String[] args) throws Exception{
-        SougouAssistant sougouAssistant = new SougouAssistant(4);
+        SougouAssistant sougouAssistant = new SougouAssistant(1);
         sougouAssistant.requestServer();
         sougouAssistant.parseJson();
     }

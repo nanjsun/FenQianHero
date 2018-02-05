@@ -1,5 +1,6 @@
 package com.fenqian;
 
+import com.fenqian.answer.sougou.SougouAssistant;
 import com.fenqian.click.HandIn;
 import com.fenqian.image.ScreenShotImage;
 import com.fenqian.image.ValidRegion;
@@ -74,6 +75,7 @@ public class LetUsGetMoney {
     }
 
     public void startWithOnlineOCR() throws IOException{
+
         boolean imageValid = false;
         int recaptureCount = 0;
         ScreenShotImage screenShotImage = new ScreenShotImage();
@@ -148,8 +150,13 @@ public class LetUsGetMoney {
         int finalResult = searchQuestion.finalResultIndex();
         endTime = System.currentTimeMillis();
 
+        SougouAssistant sougouAssistant = new SougouAssistant(appIndex);
+        String[] questionAndOptionsFromSougou = sougouAssistant.getQuestionAndOptions();
+        int answerIndexFromSougou = sougouAssistant.getAnswerIndex();
 
         System.out.println("finalResult :" + finalResult + "---" + answers[finalResult]);
+        System.out.println("finalResultFromSougou :" + answerIndexFromSougou + "---"
+                + questionAndOptionsFromSougou[answerIndexFromSougou + 1]);
 
         System.out.println("totalTime :" + (endTime - startTime));
 
@@ -168,7 +175,7 @@ public class LetUsGetMoney {
 //handin twice to make sure handin success!
         for(int i = 0; i < 2 ; i ++){
 //            click the app zone , to focus on this APP
-            handIn.mouseClick(finalResult);
+            handIn.mouseClick(answerIndexFromSougou);
             handIn.keyboardClick(finalResult);
             System.out.println("finalTime :" + (System.currentTimeMillis() - startTime));
 
