@@ -1,6 +1,6 @@
 ## 主页上线
-欢迎大家访问
-[www.fenqian.me](www.fenqian.me)
+程序入口 ：
+FenQianHero\src\main\java\com\fenqian\gui\javafx\WorkShop.java
 
 ## 演示
 - 自动提交答案
