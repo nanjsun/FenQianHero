@@ -178,6 +178,7 @@ public class LetUsGetMoney {
         for(int i = 0; i < 2 ; i ++){
 //            click the app zone , to focus on this APP
             handIn.mouseClick(answerIndexFromSougou);
+            handIn.mouseClick(finalResult);
             handIn.keyboardClick(finalResult);
             System.out.println("finalTime :" + (System.currentTimeMillis() - startTime));
 

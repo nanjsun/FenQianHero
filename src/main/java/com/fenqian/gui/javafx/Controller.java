@@ -32,8 +32,8 @@ public class Controller {
     public void sayHelloWorld(ActionEvent actionEvent) {
         countDown.setText("" + i);
         i --;
-        globalView.setImage(new Image("globalImage.png"));
-        validView.setImage(new Image("validImage.jpg"));
+        globalView.setImage(new Image("QQGroup.png"));
+        validView.setImage(new Image("WeChat Pay.png"));
 //        appChoiceBox.getItems().add("xxxx");
 //        globalView.setImage(SwingFXUtils.toFXImage(globalBufferedImage, null));
 //        validView.setImage(SwingFXUtils.toFXImage(validBufferedImage, null));
