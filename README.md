@@ -2,6 +2,13 @@
 欢迎大家访问
 [www.fenqian.me](www.fenqian.me)
 
+## 演示
+- 自动提交答案
+![image](https://github.com/nanjsun/FenQianHero/blob/master/autoHandin.gif)
+
+- 切换不同的APP
+![image](https://github.com/nanjsun/FenQianHero/blob/master/switchAPP%26OCR.gif)
+
 ## 更新日志
 - 2018-02-05 自动识别答题区域的状态（答题或者公布答案）
 - 2018-02-03 集成搜狗汪仔答题助手
