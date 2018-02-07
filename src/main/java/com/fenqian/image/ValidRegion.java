@@ -47,8 +47,8 @@ public class ValidRegion {
         int validRegionHeight = 0;
 
         outLoop:
-        for (int i = 0; i < (width / DEVIDE) - 2; i ++){
-            for (int j = 0; j < (height / DEVIDE) - 2; j ++){
+        for (int i = 10; i < (width / DEVIDE) - 2; i ++){
+            for (int j = 10; j < (height / DEVIDE) - 2; j ++){
 //                System.out.println(i * DEVIDE + "-" + j *DEVIDE);
                 if((isWhitePoint(i * DEVIDE, j * DEVIDE))
                         && (isWhitePoint((i + 1) * DEVIDE, j * DEVIDE))
@@ -152,7 +152,7 @@ public class ValidRegion {
 
     public static void main(String[] args) throws IOException{
             BufferedImage bufferedImage;
-            bufferedImage = ImageIO.read(new File("./photos/10.jpg"));
+            bufferedImage = ImageIO.read(new File("./photos/globalImage.jpg"));
             ValidRegion validRegion = new ValidRegion(bufferedImage);
             validRegion.searchValidRegion();
             for(int i = 0; i < 4; i ++ ){

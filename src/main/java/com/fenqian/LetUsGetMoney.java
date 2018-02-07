@@ -7,11 +7,15 @@ import com.fenqian.image.ValidRegion;
 import com.fenqian.ocr.ali.AliOCR;
 import com.fenqian.ocr.baidu.BaiduOCR;
 import com.fenqian.search.SearchQuestion;
+import com.fenqian.thread.SougouAssistantThread;
+import com.github.jaiimageio.plugins.tiff.EXIFGPSTagSet;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.concurrent.*;
 
 /**
  * @author nanj
@@ -24,13 +28,13 @@ public class LetUsGetMoney {
     private String question;
     private long startTime;
     private long endTime;
-    private int validRegionLeft = 660;
-    private int validRegionTop = 140;
-    private int validRegionWidth = 600;
-    private int validRegionHeight = 360;
+    private static int validRegionLeft = 660;
+    private static int validRegionTop = 140;
+    private static int validRegionWidth = 600;
+    private static int validRegionHeight = 360;
 
-    private int globalRegionLeft = 160;
-    private int globalRegionTop = 120;
+    private static int globalRegionLeft = 160;
+    private static int globalRegionTop = 120;
     private int globalRegionWidth = 1000;
     private int globalRegionHeight = 1000;
 
@@ -47,6 +51,9 @@ public class LetUsGetMoney {
     private final int[] validRegionTopOffset = {0,60,25,40};
     private final int[] validRegionBottonOffset = {0,70,50,40};
     private int appIndex;
+
+    private int answerIndexFromSougou = 0;
+    private String[] questionAndOptionsFromSougou = new String[4];
 
 
     public void init(int appIndex) {
@@ -152,9 +159,24 @@ public class LetUsGetMoney {
         int finalResult = searchQuestion.finalResultIndex();
         endTime = System.currentTimeMillis();
 
-        SougouAssistant sougouAssistant = new SougouAssistant(appIndex);
-        String[] questionAndOptionsFromSougou = sougouAssistant.getQuestionAndOptions();
-        int answerIndexFromSougou = sougouAssistant.getAnswerIndex();
+        ExecutorService answer = Executors.newSingleThreadExecutor();
+//        ArrayList<Future<String[]>> results = new ArrayList<Future<String[]>>();
+        Future<String[]> results;
+
+        results = answer.submit(new SougouAssistantThread(appIndex));
+
+        try{
+            String[] xx = results.get();
+            System.out.println("result from sougou:");
+            for(int i = 0; i < 5; ++i){
+                System.out.println(xx[i]);
+
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
 
         System.out.println("finalResult :" + finalResult + "---" + answers[finalResult]);
         System.out.println("finalResultFromSougou :" + answerIndexFromSougou + "---"
@@ -184,6 +206,10 @@ public class LetUsGetMoney {
 
         }
 
+    }
+    public static void setGlobalRegionLeftTop(int x, int y){
+        globalRegionLeft = x;
+        globalRegionTop = y;
     }
 
     public BufferedImage getGlobalImage(){

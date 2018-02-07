@@ -3,7 +3,6 @@ target/
 *.jpg
 *.png
 *.txt
-photos/
 .idea/workspace.xml
 FenQianHero.iml
 *.txt
